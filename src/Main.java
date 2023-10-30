@@ -3,30 +3,121 @@ import java.util.Random;
 
 // NOTE
 // Matrix (user 7x7;)Ships(1x3; 1x2 2; 1x1 4;)
-// 
-// 
-public class Main 
-{
-    public static void main(String[] args) throws Exception 
-    {
+// 0 - free X-ship ^-close to ship
+// X - hit, # - miss, @-sunk  
+public class Main {
+    public static void main(String[] args) throws Exception {
 
         Scanner sc = new Scanner(System.in);
         int s = 9;
         String[][] hidenField = fieldConstructor();
-
-        // output field 7x7
         for (int i = 1; i < s - 1; i++) {
             for (int j = 1; j < s - 1; j++) {
                 System.out.print(hidenField[i][j] + " ");
             }
             System.out.println();
         }
+        //
+        System.out.println("Enter username ...");
+        String username = sc.nextLine();
+        clear();
+        //
+        String[][] playField = new String[s][s];
+        for (int i = 0; i < s; i++) {
+            for (int j = 0; j < s; j++) {
+                playField[i][j] = "0";
+            }
+        }
+        // playin
+        int turn = 0;
+        int hit = 0;
+        int shotCol = 0;
+        int shotRow = 0;
+        String battleLog = "Let's get started!";
+        while (hit != 11) {
+
+            showField(battleLog,playField);
+            System.out.println("Choose coordinate to shoot...");
+            shotCol = sc.nextInt();
+            shotRow = sc.nextInt();
+            clear();
+            if (shotCol > 7 || shotCol < 1 || shotRow > 7 || shotRow < 1) {
+                System.out.println("You can only shoot on coordinates from 1 to 7");
+                System.out.println("Enter anything to continue...");
+                String pause = sc.next();
+                continue;
+            }
+            if (!playField[s - shotRow - 1][shotCol].equals("0")) {
+                System.out.println("You can not shoot same coordinate twice, r u dum?");
+                System.out.println("Enter anything to continue...");
+                String pause = sc.next();
+                continue;
+            }
+            if (hidenField[s - shotRow - 1][shotCol].equals("X")) {
+                playField[s - shotRow - 1][shotCol] = "X";
+                battleLog = "Hit!";
+                turn++;
+                // if (!hidenField[s - shotRow][shotCol].equals("X") && !hidenField[s - shotRow
+                // - 2][shotCol].equals("X")
+                // && !hidenField[s - shotRow - 1][shotCol - 1].equals("X")
+                // && !hidenField[s - shotRow - 1][shotCol + 1].equals("X"))
+                // {
+                // playField[s - shotRow - 1][shotCol] = "@";
+                // if(playField[s - shotRow][shotCol].equals("X"))
+                // {
+                // playField[s - shotRow ][shotCol] = "@";
+                // }
+                // if(playField[s - shotRow - 2][shotCol].equals("X"))
+                // {
+                // playField[s - shotRow - 2][shotCol] = "@";
+                // }
+                // if(playField[s - shotRow - 1][shotCol - 1].equals("X"))
+                // {
+                // playField[s - shotRow - 1][shotCol - 1] = "@";
+                // }
+                // if(playField[s - shotRow - 1][shotCol + 1].equals("X"))
+                // {
+                // playField[s - shotRow - 1][shotCol + 1] = "@";
+                // }
+                // System.out.println("Sunk!");
+                // }
+                hit++;
+            } else if (!hidenField[s - shotRow - 1][shotCol].equals("X")) {
+                playField[s - shotRow - 1][shotCol] = "#";
+                battleLog = "Miss!";
+                turn++;
+            }
+        }
+        // output field 7x7
+        for (int i = 1; i < s - 1; i++) {
+            for (int j = 1; j < s - 1; j++) {
+                System.out.print(playField[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println("Congratulations! " + username + ", you won with just " + turn + " turns");
+        sc.close();
     }
-    // 
+
+    //
+    public static void showField(String log, String[][] field) {
+        System.out.println(log);
+        for (int i = 1; i < 9 - 1; i++) {
+            for (int j = 1; j < 9 - 1; j++) {
+                System.out.print(field[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+    public static void clear() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
+    //
     // Creating matrix with ships
-    // 
-    public static String[][] fieldConstructor() 
-    {
+    //
+    public static String[][] fieldConstructor() {
         Random rand = new Random();
         int s = 9;
         String[][] field = new String[s][s];
