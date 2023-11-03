@@ -1,101 +1,154 @@
 import java.util.Scanner;
 import java.util.Random;
-
+import java.util.ArrayList;
 // NOTE
 // Matrix (user 7x7;)Ships(1x3; 1x2 2; 1x1 4;)
 // 0 - free X-ship ^-close to ship
-// X - hit, # - miss, @-sunk  
+// X - hit, # - miss, %-sunk  
 public class Main {
     public static void main(String[] args) throws Exception {
 
         Scanner sc = new Scanner(System.in);
         int s = 9;
-        String[][] hidenField = fieldConstructor();
-        for (int i = 1; i < s - 1; i++) {
-            for (int j = 1; j < s - 1; j++) {
-                System.out.print(hidenField[i][j] + " ");
-            }
-            System.out.println();
-        }
+        // String[][] hidenField = fieldConstructor();
+        // show where the ships
+        // for (int i = 1; i < s - 1; i++) {
+        //     for (int j = 1; j < s - 1; j++) {
+        //         System.out.print(hidenField[i][j] + " ");
+        //     }
+        //     System.out.println();
+        // }
         //
-        System.out.println("Enter username ...");
-        String username = sc.nextLine();
-        clear();
-        //
-        String[][] playField = new String[s][s];
-        for (int i = 0; i < s; i++) {
-            for (int j = 0; j < s; j++) {
-                playField[i][j] = "0";
-            }
-        }
+        //filling playField
+        // String[][] playField = new String[s][s];
+        // for (int i = 0; i < s; i++) {
+        //     for (int j = 0; j < s; j++) {
+        //         playField[i][j] = "0";
+        //     }
+        // }
         // playin
-        int turn = 0;
-        int hit = 0;
-        int shotCol = 0;
-        int shotRow = 0;
-        String battleLog = "Let's get started!";
-        while (hit != 11) {
-
-            showField(battleLog,playField);
-            System.out.println("Choose coordinate to shoot...");
-            shotCol = sc.nextInt();
-            shotRow = sc.nextInt();
+        int x = 0;
+        while (x == 0)
+        {
+            String[][] hidenField = fieldConstructor();
+            for (int i = 1; i < s - 1; i++) {
+                for (int j = 1; j < s - 1; j++) {
+                    System.out.print(hidenField[i][j] + " ");
+                }
+                System.out.println();
+            }
+            String[][] playField = new String[s][s];
+            for (int i = 0; i < s; i++) {
+                for (int j = 0; j < s; j++) {
+                    playField[i][j] = "0";
+                }
+            }
+            System.out.println("Enter username ...");
+            String username = sc.next();
             clear();
-            if (shotCol > 7 || shotCol < 1 || shotRow > 7 || shotRow < 1) {
-                System.out.println("You can only shoot on coordinates from 1 to 7");
-                System.out.println("Enter anything to continue...");
-                String pause = sc.next();
-                continue;
+            int turn = 0;
+            int hit = 0;
+            int shotCol = 0;
+            int shotRow = 0;
+            ArrayList<Integer> turns = new ArrayList<Integer>();
+            ArrayList<String> players = new ArrayList<String>();
+            String battleLog = "Let's get started!";
+            while (hit != 11) {
+
+                showField(battleLog, playField);
+                System.out.println("Choose coordinate to shoot...");
+                shotCol = sc.nextInt();
+                shotRow = sc.nextInt();
+                clear();
+                if (shotCol > 7 || shotCol < 1 || shotRow > 7 || shotRow < 1) {
+                    System.out.println("You can only shoot on coordinates from 1 to 7");
+                    System.out.println("Enter anything to continue...");
+                    String pause = sc.next();
+                    clear();
+                    continue;
+                }
+                if (!playField[s - shotRow - 1][shotCol].equals("0")
+                        || playField[s - shotRow][shotCol].equals("%")
+                        || playField[s - shotRow - 2][shotCol].equals("%")
+                        || playField[s - shotRow - 1][shotCol - 1].equals("%")
+                        || playField[s - shotRow - 1][shotCol + 1].equals("%")
+                        || playField[s - shotRow][shotCol + 1].equals("%")
+                        || playField[s - shotRow][shotCol - 1].equals("%")
+                        || playField[s - shotRow - 2][shotCol - 1].equals("%")
+                        || playField[s - shotRow - 2][shotCol + 1].equals("%")) {
+                    System.out.println("Why shooting there my boi?");
+                    System.out.println("Enter anything to continue...");
+                    String pause = sc.next();
+                    clear();
+                    continue;
+                }
+                if (hidenField[s - shotRow - 1][shotCol].equals("X")) {
+                    playField[s - shotRow - 1][shotCol] = "X";
+                    hidenField[s - shotRow - 1][shotCol] = "%";
+                    battleLog = "Hit!";
+                    turn++;
+                    //
+                    if (!hidenField[s - shotRow - 1][shotCol].equals("X")
+                            && !hidenField[s - shotRow - 2][shotCol].equals("X")
+                            && !hidenField[s - shotRow - 1][shotCol - 1].equals("X")
+                            && !hidenField[s - shotRow - 1][shotCol + 1].equals("X")) {
+                        battleLog = "Sunk!";
+                        for (int i = 1; i < s - 1; i++) {
+                            for (int j = 1; j < s - 1; j++) {
+                                if (hidenField[i][j].equals("%"))
+                                    playField[i][j] = "%";
+                            }
+                        }
+                        // 
+                        // playField[s - shotRow - 1][shotCol] = "%";
+                        // if (hidenField[s - shotRow + 1][shotCol].equals("%"))
+                        //     playField[s - shotRow + 1][shotCol] = "%";
+                        // if (hidenField[s - shotRow][shotCol].equals("%"))
+                        //     playField[s - shotRow][shotCol] = "%";
+                        // // if (hidenField[s - shotRow - 2][shotCol].equals("%"))
+                        // //     playField[s - shotRow - 2][shotCol] = "%";
+                        // // if (hidenField[s - shotRow - 3][shotCol].equals("%"))
+                        // //     playField[s - shotRow - 3][shotCol] = "%";
+                        // // if (hidenField[s - shotRow][shotCol - 2].equals("%"))
+                        // //     playField[s - shotRow][shotCol - 2] = "%";
+                        // if (hidenField[s - shotRow][shotCol - 1].equals("%"))
+                        //     playField[s - shotRow][shotCol - 1] = "%";
+                        // if (hidenField[s - shotRow][shotCol + 1].equals("%"))
+                        //     playField[s - shotRow][shotCol + 1] = "%";
+                        // if (hidenField[s - shotRow][shotCol + 2].equals("%"))
+                        //     playField[s - shotRow][shotCol + 2] = "%";
+                        
+                    }
+                    hit++;
+                } else if (!hidenField[s - shotRow - 1][shotCol].equals("X")) {
+                    playField[s - shotRow - 1][shotCol] = ".";
+                    battleLog = "Miss!";
+                    turn++;
+                }
             }
-            if (!playField[s - shotRow - 1][shotCol].equals("0")) {
-                System.out.println("You can not shoot same coordinate twice, r u dum?");
-                System.out.println("Enter anything to continue...");
-                String pause = sc.next();
-                continue;
+            // output field 7x7
+            for (int i = 1; i < s - 1; i++) {
+                for (int j = 1; j < s - 1; j++) {
+                    System.out.print(playField[i][j] + " ");
+                }
+                System.out.println();
             }
-            if (hidenField[s - shotRow - 1][shotCol].equals("X")) {
-                playField[s - shotRow - 1][shotCol] = "X";
-                battleLog = "Hit!";
-                turn++;
-                // if (!hidenField[s - shotRow][shotCol].equals("X") && !hidenField[s - shotRow
-                // - 2][shotCol].equals("X")
-                // && !hidenField[s - shotRow - 1][shotCol - 1].equals("X")
-                // && !hidenField[s - shotRow - 1][shotCol + 1].equals("X"))
-                // {
-                // playField[s - shotRow - 1][shotCol] = "@";
-                // if(playField[s - shotRow][shotCol].equals("X"))
-                // {
-                // playField[s - shotRow ][shotCol] = "@";
-                // }
-                // if(playField[s - shotRow - 2][shotCol].equals("X"))
-                // {
-                // playField[s - shotRow - 2][shotCol] = "@";
-                // }
-                // if(playField[s - shotRow - 1][shotCol - 1].equals("X"))
-                // {
-                // playField[s - shotRow - 1][shotCol - 1] = "@";
-                // }
-                // if(playField[s - shotRow - 1][shotCol + 1].equals("X"))
-                // {
-                // playField[s - shotRow - 1][shotCol + 1] = "@";
-                // }
-                // System.out.println("Sunk!");
-                // }
-                hit++;
-            } else if (!hidenField[s - shotRow - 1][shotCol].equals("X")) {
-                playField[s - shotRow - 1][shotCol] = "#";
-                battleLog = "Miss!";
-                turn++;
-            }
-        }
-        // output field 7x7
-        for (int i = 1; i < s - 1; i++) {
-            for (int j = 1; j < s - 1; j++) {
-                System.out.print(playField[i][j] + " ");
+            System.out.println("Congratulations! " + username + ", you won with just " + turn + " turns");
+            turns.add(turn);
+            players.add(username);
+            System.out.println(turn + " hg: " + username );
+            System.out.println("Do you want to continue plaing|0| or want to exit|1|");
+            x = sc.nextInt();
+            if (x == 1) {
+                for (int i = 0; i < turns.size(); i++) {
+                    System.out.println(players.get(i) + "|   " + turns.get(i));
+                }
             }
             System.out.println();
+            System.out.println("Print anything...");
+            String pause = sc.next();
+
         }
-        System.out.println("Congratulations! " + username + ", you won with just " + turn + " turns");
         sc.close();
     }
 
@@ -109,6 +162,7 @@ public class Main {
             System.out.println();
         }
     }
+
     public static void clear() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
@@ -131,10 +185,10 @@ public class Main {
         int col = 0;
         int randDir = 0;
         randDir = rand.nextInt(1, 3);
+        row = rand.nextInt(1, 6);
+        col = rand.nextInt(1, 6);
         if (randDir == 1)// Y
         {
-            row = rand.nextInt(1, 6);
-            col = rand.nextInt(1, 6);
             for (int i = 0; i < 3; i++) {
                 field[row + i][col] = "X";
                 field[row + i][col - 1] = "^";
@@ -147,8 +201,7 @@ public class Main {
             field[row + 3][col - 1] = "^";
             field[row + 3][col + 1] = "^";
         } else if (randDir == 2) {// X
-            row = rand.nextInt(1, 6);
-            col = rand.nextInt(1, 6);
+
             for (int i = 0; i < 3; i++) {
                 field[row][col + i] = "X";
                 //
