@@ -1,6 +1,6 @@
-import java.util.Scanner;
-import java.util.Random;
-import java.util.ArrayList;
+
+import java.util.*;
+
 // NOTE
 // Matrix (user 7x7;)Ships(1x3; 1x2 2; 1x1 4;)
 // 0 - free X-ship ^-close to ship
@@ -13,23 +13,26 @@ public class Main {
         // String[][] hidenField = fieldConstructor();
         // show where the ships
         // for (int i = 1; i < s - 1; i++) {
-        //     for (int j = 1; j < s - 1; j++) {
-        //         System.out.print(hidenField[i][j] + " ");
-        //     }
-        //     System.out.println();
+        // for (int j = 1; j < s - 1; j++) {
+        // System.out.print(hidenField[i][j] + " ");
+        // }
+        // System.out.println();
         // }
         //
-        //filling playField
+        // filling playField
         // String[][] playField = new String[s][s];
         // for (int i = 0; i < s; i++) {
-        //     for (int j = 0; j < s; j++) {
-        //         playField[i][j] = "0";
-        //     }
+        // for (int j = 0; j < s; j++) {
+        // playField[i][j] = "0";
+        // }
         // }
         // playin
         int x = 0;
-        while (x == 0)
-        {
+        int turn = 0;
+        String username = "";
+        ArrayList<Integer> turns = new ArrayList<Integer>();
+        HashMap<Integer, String> players = new HashMap<>();
+        while (x == 0) {
             String[][] hidenField = fieldConstructor();
             for (int i = 1; i < s - 1; i++) {
                 for (int j = 1; j < s - 1; j++) {
@@ -44,14 +47,12 @@ public class Main {
                 }
             }
             System.out.println("Enter username ...");
-            String username = sc.next();
+            username = sc.next();
             clear();
-            int turn = 0;
+            turn = 0;
             int hit = 0;
             int shotCol = 0;
             int shotRow = 0;
-            ArrayList<Integer> turns = new ArrayList<Integer>();
-            ArrayList<String> players = new ArrayList<String>();
             String battleLog = "Let's get started!";
             while (hit != 11) {
 
@@ -99,25 +100,25 @@ public class Main {
                                     playField[i][j] = "%";
                             }
                         }
-                        // 
+                        //
                         // playField[s - shotRow - 1][shotCol] = "%";
                         // if (hidenField[s - shotRow + 1][shotCol].equals("%"))
-                        //     playField[s - shotRow + 1][shotCol] = "%";
+                        // playField[s - shotRow + 1][shotCol] = "%";
                         // if (hidenField[s - shotRow][shotCol].equals("%"))
-                        //     playField[s - shotRow][shotCol] = "%";
+                        // playField[s - shotRow][shotCol] = "%";
                         // // if (hidenField[s - shotRow - 2][shotCol].equals("%"))
-                        // //     playField[s - shotRow - 2][shotCol] = "%";
+                        // // playField[s - shotRow - 2][shotCol] = "%";
                         // // if (hidenField[s - shotRow - 3][shotCol].equals("%"))
-                        // //     playField[s - shotRow - 3][shotCol] = "%";
+                        // // playField[s - shotRow - 3][shotCol] = "%";
                         // // if (hidenField[s - shotRow][shotCol - 2].equals("%"))
-                        // //     playField[s - shotRow][shotCol - 2] = "%";
+                        // // playField[s - shotRow][shotCol - 2] = "%";
                         // if (hidenField[s - shotRow][shotCol - 1].equals("%"))
-                        //     playField[s - shotRow][shotCol - 1] = "%";
+                        // playField[s - shotRow][shotCol - 1] = "%";
                         // if (hidenField[s - shotRow][shotCol + 1].equals("%"))
-                        //     playField[s - shotRow][shotCol + 1] = "%";
+                        // playField[s - shotRow][shotCol + 1] = "%";
                         // if (hidenField[s - shotRow][shotCol + 2].equals("%"))
-                        //     playField[s - shotRow][shotCol + 2] = "%";
-                        
+                        // playField[s - shotRow][shotCol + 2] = "%";
+
                     }
                     hit++;
                 } else if (!hidenField[s - shotRow - 1][shotCol].equals("X")) {
@@ -135,19 +136,20 @@ public class Main {
             }
             System.out.println("Congratulations! " + username + ", you won with just " + turn + " turns");
             turns.add(turn);
-            players.add(username);
-            System.out.println(turn + " hg: " + username );
+            players.put(turn,username);
+            System.out.println(turn + " hg: " + username);
             System.out.println("Do you want to continue plaing|0| or want to exit|1|");
             x = sc.nextInt();
             if (x == 1) {
+                Collections.sort(turns);
                 for (int i = 0; i < turns.size(); i++) {
-                    System.out.println(players.get(i) + "|   " + turns.get(i));
+                    System.out.println(players.get(turns.get(i)) + "|   " + turns.get(i));
                 }
             }
             System.out.println();
             System.out.println("Print anything...");
             String pause = sc.next();
-
+            clear();
         }
         sc.close();
     }
