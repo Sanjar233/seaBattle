@@ -16,6 +16,13 @@ public class Main {
         coordinatesX.put("e", 5);
         coordinatesX.put("f", 6);
         coordinatesX.put("g", 7);
+        coordinatesX.put("A", 1);
+        coordinatesX.put("B", 2);
+        coordinatesX.put("C", 3);
+        coordinatesX.put("D", 4);
+        coordinatesX.put("E", 5);
+        coordinatesX.put("F", 6);
+        coordinatesX.put("G", 7);
         coordinatesY.put("1", 1);
         coordinatesY.put("2", 2);
         coordinatesY.put("3", 3);
@@ -76,7 +83,7 @@ public class Main {
                     keyRow = sc.next();
                     clear();
                     showField(battleLog, playField);
-                    
+
                 }
                 shotCol = coordinatesX.get(keyCol);
                 shotRow = coordinatesY.get(keyRow);
@@ -142,12 +149,8 @@ public class Main {
                 }
             }
             // output field 7x7
-            for (int i = 1; i < s - 1; i++) {
-                for (int j = 1; j < s - 1; j++) {
-                    System.out.print(playField[i][j] + " ");
-                }
-                System.out.println();
-            }
+            battleLog = "Victory!";
+            showField(battleLog, playField);
             System.out.println("Congratulations! " + username + ", you won with just " + turn + " turns");
             turns.add(turn);
             players.put(turn, username);
