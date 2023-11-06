@@ -7,14 +7,22 @@ import java.util.*;
 // X - hit, # - miss, %-sunk  
 public class Main {
     public static void main(String[] args) throws Exception {
-        HashMap<String, Integer> coordinates = new HashMap<>();
-        coordinates.put("a", 1);
-        coordinates.put("b", 2);
-        coordinates.put("c", 3);
-        coordinates.put("d", 4);
-        coordinates.put("e", 5);
-        coordinates.put("f", 6);
-        coordinates.put("g", 7);
+        HashMap<String, Integer> coordinatesX = new HashMap<>();
+        HashMap<String, Integer> coordinatesY = new HashMap<>();
+        coordinatesX.put("a", 1);
+        coordinatesX.put("b", 2);
+        coordinatesX.put("c", 3);
+        coordinatesX.put("d", 4);
+        coordinatesX.put("e", 5);
+        coordinatesX.put("f", 6);
+        coordinatesX.put("g", 7);
+        coordinatesY.put("1", 1);
+        coordinatesY.put("2", 2);
+        coordinatesY.put("3", 3);
+        coordinatesY.put("4", 4);
+        coordinatesY.put("5", 5);
+        coordinatesY.put("6", 6);
+        coordinatesY.put("7", 7);
         Scanner sc = new Scanner(System.in);
         int s = 9;
         // playin
@@ -28,8 +36,7 @@ public class Main {
             ArrayList<Integer> tripleShipCords = new ArrayList<Integer>();
             for (int i = 1; i < s - 1; i++) {
                 for (int j = 1; j < s - 1; j++) {
-                    if(hidenField[i][j].equals("X3"))
-                    {
+                    if (hidenField[i][j].equals("X3")) {
                         tripleShipCords.add(i);
                         tripleShipCords.add(j);
                     }
@@ -47,23 +54,33 @@ public class Main {
             turn = 0;
             int hit = 0;
             String keyCol = "";
+            String keyRow = "";
             int shotCol = 0;
             int shotRow = 0;
-            String battleLog = "Let's get started!";
+            String battleLog = "";
+            System.out.println("Let's get started!");
             while (hit != 11) {
                 showField(battleLog, playField);
                 System.out.println("Choose X|Y coordinate to shoot...");
                 keyCol = sc.next();
-                shotCol = coordinates.get(keyCol);
-                shotRow = sc.nextInt();
-                clear();
-                if (shotCol > 7 || shotCol < 1 || shotRow > 7 || shotRow < 1) {
-                    System.out.println("You can only shoot on coordinates from 1 to 7");
-                    System.out.println("Enter anything to continue...");
-                    String pause = sc.next();
+                keyRow = sc.next();
+                while (coordinatesX.containsKey(keyCol) == false || coordinatesY.containsKey(keyRow) == false) {
+                    battleLog = "(> - <)";
                     clear();
-                    continue;
+                    showField(battleLog, playField);
+                    System.out.println();
+                    System.out.println("Incorrect coordinates, please try again.");
+                    System.out.println("Please use A-G for X, and 1-7 for Y");
+                    System.out.println("Choose X|Y coordinate to shoot...");
+                    keyCol = sc.next();
+                    keyRow = sc.next();
+                    clear();
+                    showField(battleLog, playField);
+                    
                 }
+                shotCol = coordinatesX.get(keyCol);
+                shotRow = coordinatesY.get(keyRow);
+                clear();
                 if (!playField[s - shotRow - 1][shotCol].equals("0")
                         || playField[s - shotRow][shotCol].equals("%")
                         || playField[s - shotRow - 2][shotCol].equals("%")
@@ -85,47 +102,40 @@ public class Main {
                     battleLog = "Hit!";
                     turn++;
                     hit++;
-                    //SUNK
+                    // SUNK
                     // for 1x1
-                    if (hidenField[s - shotRow - 1][shotCol].equals("X1%"))
-                    {
+                    if (hidenField[s - shotRow - 1][shotCol].equals("X1%")) {
                         playField[s - shotRow - 1][shotCol] = "%";
                         battleLog = "Sunk!";
                     }
                     // for 1x3
-                    if(hidenField[tripleShipCords.get(0)][tripleShipCords.get(1)].contains("X3%") 
-                        && hidenField[tripleShipCords.get(2)][tripleShipCords.get(3)].contains("X3%") 
-                        && hidenField[tripleShipCords.get(4)][tripleShipCords.get(5)].contains("X3%"))
-                    {
+                    if (hidenField[tripleShipCords.get(0)][tripleShipCords.get(1)].contains("X3%")
+                            && hidenField[tripleShipCords.get(2)][tripleShipCords.get(3)].contains("X3%")
+                            && hidenField[tripleShipCords.get(4)][tripleShipCords.get(5)].contains("X3%")) {
                         playField[tripleShipCords.get(0)][tripleShipCords.get(1)] = "%";
                         playField[tripleShipCords.get(2)][tripleShipCords.get(3)] = "%";
                         playField[tripleShipCords.get(4)][tripleShipCords.get(5)] = "%";
                         battleLog = "Sunk!";
                     }
-                    // for 1x2 
-                    if(hidenField[s - shotRow - 1][shotCol - 1].equals("X2%"))
-                    {
+                    // for 1x2
+                    if (hidenField[s - shotRow - 1][shotCol - 1].equals("X2%")) {
                         playField[s - shotRow - 1][shotCol] = "%";
                         playField[s - shotRow - 1][shotCol - 1] = "%";
                     }
-                    if(hidenField[s - shotRow - 1][shotCol +1 ].equals("X2%"))
-                    {
+                    if (hidenField[s - shotRow - 1][shotCol + 1].equals("X2%")) {
                         playField[s - shotRow - 1][shotCol + 1] = "%";
                         playField[s - shotRow - 1][shotCol] = "%";
                     }
-                    if(hidenField[s - shotRow][shotCol].equals("X2%"))
-                    {
+                    if (hidenField[s - shotRow][shotCol].equals("X2%")) {
                         playField[s - shotRow][shotCol] = "%";
                         playField[s - shotRow - 1][shotCol] = "%";
                     }
-                    if(hidenField[s - shotRow - 2][shotCol].equals("X2%"))
-                    {
+                    if (hidenField[s - shotRow - 2][shotCol].equals("X2%")) {
                         playField[s - shotRow - 2][shotCol] = "%";
                         playField[s - shotRow - 1][shotCol] = "%";
                     }
-                    // 
-                }
-                else if (!hidenField[s - shotRow - 1][shotCol].contains("X")) {
+                    //
+                } else if (!hidenField[s - shotRow - 1][shotCol].contains("X")) {
                     playField[s - shotRow - 1][shotCol] = ".";
                     battleLog = "Miss!";
                     turn++;
@@ -140,7 +150,7 @@ public class Main {
             }
             System.out.println("Congratulations! " + username + ", you won with just " + turn + " turns");
             turns.add(turn);
-            players.put(turn,username);
+            players.put(turn, username);
             System.out.println("Do you want to continue plaing|0| or want to exit|1|");
             x = sc.nextInt();
             clear();
