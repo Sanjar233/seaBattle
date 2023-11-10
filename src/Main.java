@@ -1,7 +1,3 @@
-
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.nio.charset.Charset;
 import java.util.*;
 
 public class Main {
@@ -9,6 +5,7 @@ public class Main {
         String freeSpot = "\u25cb";
         String shotSpot = "\u25ce";
         String sunk = "\u25cf";
+        String miss = "\u25e6";
         HashMap<String, Integer> coordinatesX = new HashMap<>();
         HashMap<String, Integer> coordinatesY = new HashMap<>();
         coordinatesX.put("a", 1);
@@ -54,7 +51,7 @@ public class Main {
             String[][] playField = new String[s][s];
             for (int i = 0; i < s; i++) {
                 for (int j = 0; j < s; j++) {
-                    playField[i][j] = "0";
+                    playField[i][j] = freeSpot;
                 }
             }
             System.out.println("Enter username ...");
@@ -90,15 +87,15 @@ public class Main {
                 shotCol = coordinatesX.get(keyCol);
                 shotRow = coordinatesY.get(keyRow);
                 clear();
-                if (!playField[s - shotRow - 1][shotCol].equals("0")
-                        || playField[s - shotRow][shotCol].equals("%")
-                        || playField[s - shotRow - 2][shotCol].equals("%")
-                        || playField[s - shotRow - 1][shotCol - 1].equals("%")
-                        || playField[s - shotRow - 1][shotCol + 1].equals("%")
-                        || playField[s - shotRow][shotCol + 1].equals("%")
-                        || playField[s - shotRow][shotCol - 1].equals("%")
-                        || playField[s - shotRow - 2][shotCol - 1].equals("%")
-                        || playField[s - shotRow - 2][shotCol + 1].equals("%")) {
+                if (!playField[s - shotRow - 1][shotCol].equals(freeSpot)
+                        || playField[s - shotRow][shotCol].equals(sunk)
+                        || playField[s - shotRow - 2][shotCol].equals(sunk)
+                        || playField[s - shotRow - 1][shotCol - 1].equals(sunk)
+                        || playField[s - shotRow - 1][shotCol + 1].equals(sunk)
+                        || playField[s - shotRow][shotCol + 1].equals(sunk)
+                        || playField[s - shotRow][shotCol - 1].equals(sunk)
+                        || playField[s - shotRow - 2][shotCol - 1].equals(sunk)
+                        || playField[s - shotRow - 2][shotCol + 1].equals(sunk)) {
                     System.out.println("Why shooting there my boi?");
                     System.out.println("Enter anything to continue...");
                     String pause = sc.next();
@@ -106,7 +103,7 @@ public class Main {
                     continue;
                 }
                 if (hidenField[s - shotRow - 1][shotCol].contains("X")) {
-                    playField[s - shotRow - 1][shotCol] = "X";
+                    playField[s - shotRow - 1][shotCol] = shotSpot;
                     hidenField[s - shotRow - 1][shotCol] += "%";
                     battleLog = "Hit!";
                     turn++;
@@ -114,38 +111,38 @@ public class Main {
                     // SUNK
                     // for 1x1
                     if (hidenField[s - shotRow - 1][shotCol].equals("X1%")) {
-                        playField[s - shotRow - 1][shotCol] = "%";
+                        playField[s - shotRow - 1][shotCol] = sunk;
                         battleLog = "Sunk!";
                     }
                     // for 1x3
                     if (hidenField[tripleShipCords.get(0)][tripleShipCords.get(1)].contains("X3%")
                             && hidenField[tripleShipCords.get(2)][tripleShipCords.get(3)].contains("X3%")
                             && hidenField[tripleShipCords.get(4)][tripleShipCords.get(5)].contains("X3%")) {
-                        playField[tripleShipCords.get(0)][tripleShipCords.get(1)] = "%";
-                        playField[tripleShipCords.get(2)][tripleShipCords.get(3)] = "%";
-                        playField[tripleShipCords.get(4)][tripleShipCords.get(5)] = "%";
+                        playField[tripleShipCords.get(0)][tripleShipCords.get(1)] = sunk;
+                        playField[tripleShipCords.get(2)][tripleShipCords.get(3)] = sunk;
+                        playField[tripleShipCords.get(4)][tripleShipCords.get(5)] = sunk;
                         battleLog = "Sunk!";
                     }
                     // for 1x2
                     if (hidenField[s - shotRow - 1][shotCol - 1].equals("X2%")) {
-                        playField[s - shotRow - 1][shotCol] = "%";
-                        playField[s - shotRow - 1][shotCol - 1] = "%";
+                        playField[s - shotRow - 1][shotCol] = sunk;
+                        playField[s - shotRow - 1][shotCol - 1] = sunk;
                     }
                     if (hidenField[s - shotRow - 1][shotCol + 1].equals("X2%")) {
-                        playField[s - shotRow - 1][shotCol + 1] = "%";
-                        playField[s - shotRow - 1][shotCol] = "%";
+                        playField[s - shotRow - 1][shotCol + 1] = sunk;
+                        playField[s - shotRow - 1][shotCol] = sunk;
                     }
                     if (hidenField[s - shotRow][shotCol].equals("X2%")) {
-                        playField[s - shotRow][shotCol] = "%";
-                        playField[s - shotRow - 1][shotCol] = "%";
+                        playField[s - shotRow][shotCol] = sunk;
+                        playField[s - shotRow - 1][shotCol] = sunk;
                     }
                     if (hidenField[s - shotRow - 2][shotCol].equals("X2%")) {
-                        playField[s - shotRow - 2][shotCol] = "%";
-                        playField[s - shotRow - 1][shotCol] = "%";
+                        playField[s - shotRow - 2][shotCol] = sunk;
+                        playField[s - shotRow - 1][shotCol] = sunk;
                     }
                     //
                 } else if (!hidenField[s - shotRow - 1][shotCol].contains("X")) {
-                    playField[s - shotRow - 1][shotCol] = ".";
+                    playField[s - shotRow - 1][shotCol] = miss;
                     battleLog = "Miss!";
                     turn++;
                 }
