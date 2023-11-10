@@ -1,12 +1,14 @@
 
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.*;
 
-// NOTE
-// Matrix (user 7x7;)Ships(1x3; 1x2 2; 1x1 4;)
-// 0 - free X-ship ^-close to ship
-// X - hit, # - miss, %-sunk  
 public class Main {
     public static void main(String[] args) throws Exception {
+        String freeSpot = "\u25cb";
+        String shotSpot = "\u25ce";
+        String sunk = "\u25cf";
         HashMap<String, Integer> coordinatesX = new HashMap<>();
         HashMap<String, Integer> coordinatesY = new HashMap<>();
         coordinatesX.put("a", 1);
